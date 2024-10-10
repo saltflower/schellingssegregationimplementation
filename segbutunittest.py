@@ -5,23 +5,23 @@ import time as t
 def sim(similar: float, ratio: float, empty: float, size: int, delay: float):
     """Schelling's Model of Segregation
     sim(similar goal (float <= 1), ratio of red dots (float <= 1), ratio of empty spaces (float <= 1), length of square grid (int), delay of steps in preview in  (float))"""
-    grid = []
-    grid = createGrid(size)
+    _grid = []
+    _grid = createGrid(size)
 
-    counts = getCounts(grid, ratio, empty)
+    _counts = getCounts(grid, ratio, empty)
 
-    seed = getSeed(counts)
-    r.shuffle(seed)
+    _seed = getSeed(_counts)
+    r.shuffle(_seed)
 
-    grid = fillGrid(grid, seed)
+    _grid = fillGrid(_grid, _seed)
 
-    win = g.GraphWin("Segregation Simulation", 400, 400, autoflush=False)
-    win.setCoords((-1) * (len(grid)/6), (-1) * (len(grid)/6), size + (len(grid)/6), size + (len(grid)/6))
+    _win = g.GraphWin("Segregation Simulation", 400, 400, autoflush=False)
+    _win.setCoords((-1) * (len(_grid)/6), (-1) * (len(_grid)/6), size + (len(_grid)/6), size + (len(_grid)/6))
 
-    runSim(win, grid, similar, delay, 1)
+    runSim(_win, _grid, similar, delay, 1)
 
-    win.getMouse()
-    win.close()
+    _win.getMouse()
+    _win.close()
 
 def createGrid(size: int) -> list:
     """returns a 2d square array of len size"""
