@@ -74,15 +74,12 @@ def getUpdateList(grid: list, similar: float) -> list:
             elseCount = 0
             for rowDiff in range(-1, 2): 
                 for colDiff in range(-1, 2):
-                    if ((row + rowDiff) >= 0) and ((col + colDiff) >= 0):
-                        try:
-                            if (grid[row+rowDiff][col+colDiff] == grid[row][col] and abs(rowDiff)+abs(colDiff)!=0):
-                                if grid[row+rowDiff][col+colDiff] == grid[row][col] and grid[row+rowDiff][col+colDiff] != "e":
-                                    simCount += 1
-                            elif grid[row+rowDiff][col+colDiff] != "e" and abs(rowDiff)+abs(colDiff)!=0 and grid[row][col] != "e":
+                    if ((row + rowDiff) >= 0) and ((col + colDiff) >= 0) and (((row + rowDiff) < len(grid)) and ((col + colDiff) < len(grid))):
+                        if (grid[row+rowDiff][col+colDiff] == grid[row][col] and abs(rowDiff)+abs(colDiff)!=0):
+                            if grid[row+rowDiff][col+colDiff] == grid[row][col] and grid[row+rowDiff][col+colDiff] != "e":
+                                simCount += 1
+                        elif grid[row+rowDiff][col+colDiff] != "e" and abs(rowDiff)+abs(colDiff)!=0 and grid[row][col] != "e":
                                 elseCount += 1
-                        except:
-                            print("pass")
                     else:
                         print(f"{rowDiff+row}, {colDiff+col} difference for {row}, {col} does not exist")
             if simCount > 0 and float(simCount / (simCount + elseCount)) >= similar:
