@@ -2,7 +2,7 @@ import random as r
 import graphics as g
 import time as t
 
-def sim(similar: float, ratio: float, empty: float, size: int, delay: float):
+def sim(similar: float, ratio: float, empty: float, size: int, delay: float) -> None:
     """Schelling's Model of Segregation
     sim(similar goal (float <= 1), ratio of red dots (float <= 1), ratio of empty spaces (float <= 1), length of square grid (int), delay of steps in preview in  (float))"""
     grid = []
@@ -11,7 +11,7 @@ def sim(similar: float, ratio: float, empty: float, size: int, delay: float):
     counts = getCounts(grid, ratio, empty)
 
     seed = getSeed(counts)
-    r.shuffle(seed)
+    r.shuffle(seed) #randomizes the seed
 
     grid = fillGrid(grid, seed)
 
@@ -73,17 +73,17 @@ def getUpdateList(grid: list, similar: float) -> list:
             elseCount = 0
             for rowDiff in range(-1, 2): 
                 for colDiff in range(-1, 2):
-                    if ((row + rowDiff) >= 0) and ((col + colDiff) >= 0) and (((row + rowDiff) < len(grid)) and ((col + colDiff) < len(grid))):
-                        if (grid[row+rowDiff][col+colDiff] == grid[row][col] and abs(rowDiff)+abs(colDiff)!=0):
-                            if grid[row+rowDiff][col+colDiff] == grid[row][col] and grid[row+rowDiff][col+colDiff] != "e":
+                    if ((row + rowDiff) >= 0) and ((col + colDiff) >= 0) and (((row + rowDiff) < len(grid)) and ((col + colDiff) < len(grid))): #making sure the spot exists
+                        if (grid[row+rowDiff][col+colDiff] == grid[row][col] and abs(rowDiff)+abs(colDiff)!=0): #making sure the spot is similar but also not itself
+                            if grid[row+rowDiff][col+colDiff] == grid[row][col] and grid[row+rowDiff][col+colDiff] != "e": #making sure it's similar and not e
                                 simCount += 1
-                        elif grid[row+rowDiff][col+colDiff] != "e" and abs(rowDiff)+abs(colDiff)!=0 and grid[row][col] != "e":
+                        elif grid[row+rowDiff][col+colDiff] != "e" and abs(rowDiff)+abs(colDiff)!=0 and grid[row][col] != "e": #making sure it's not similar but also not e
                                 elseCount += 1
                     else:
                         print(f"{rowDiff+row}, {colDiff+col} difference for {row}, {col} does not exist")
-            if simCount > 0 and float(simCount / (simCount + elseCount)) >= similar:
-                print("not needed to update")
-            elif grid[row][col] != "e":
+            if simCount > 0 and float(simCount / (simCount + elseCount)) >= similar: #checking if it needs to go on the updatelist
+                print("not needed to update") 
+            elif grid[row][col] != "e": #checking again to make sure its not e before going on the update list
                 updateList.append(tuple([row, col]))
 
     return updateList            
@@ -125,7 +125,7 @@ def getPerSatisfied(grid: list, similar: float) -> float:
     emptyList = getEmptyList(grid)
     return round((((len(grid)**2)-len(emptyList))-len(updateList))/((len(grid)**2)-len(emptyList)), 4)
 
-def drawSim(win : g.GraphWin, grid : list, similar : float, iteration : int):
+def drawSim(win : g.GraphWin, grid : list, similar : float, iteration : int) -> None:
     """function that draws the simulation after the initialization process is complete"""
     for row in range(len(grid)):
         for col in range(len(grid)):
@@ -147,7 +147,7 @@ def clear(win):
     for item in win.items[:]:
         item.undraw()
 
-def runSim(win : g.GraphWin, grid: list, similar: float, delay: float, iteration: int):
+def runSim(win : g.GraphWin, grid: list, similar: float, delay: float, iteration: int) -> None:
     """function that runs the simulation in a while loop and creates the first frame"""
     drawSim(win, updateGrid(grid, getUpdateList(grid, similar), getEmptyList(grid)), similar, iteration)
     while getPerSatisfied(grid, similar) != 1:
@@ -162,3 +162,5 @@ def makeWin(grid : list) -> g.GraphWin:
     win.setCoords((-1) * (len(grid)/6), (-1) * (len(grid)/6), len(grid) + (len(grid)/6), len(grid) + (len(grid)/6))
     return win
 
+if __name__ == '__main__':
+    sim(0.5, 0.5, 0.1, 25, 0.25)
